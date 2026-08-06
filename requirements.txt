@@ -1,0 +1,6 @@
+playwright>=1.40
+requests>=2.31
+
+# Opcional — apenas para analyze.py (grafico da serie historica)
+pandas>=2.0
+matplotlib>=3.7

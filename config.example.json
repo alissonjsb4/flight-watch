@@ -1,0 +1,8 @@
+{
+  "label": "FOR <-> POA  (21-25 jul 2026, 1 adulto, ida e volta)",
+  "url": "https://www.zupper.com.br/resultados?type=roundTrip&adultQty=1&...",
+  "tiers": [2000, 1900, 1800, 1700, 1600, 1500, 1400],
+  "noise_floor": 1000,
+  "telegram_token": "SEU_TOKEN_DO_BOTFATHER",
+  "telegram_chat_id": "SEU_CHAT_ID"
+}

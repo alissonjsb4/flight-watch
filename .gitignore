@@ -1,0 +1,13 @@
+# Credenciais e estado de execucao — nunca versionar
+config.json
+state.json
+watch.log
+
+# Chromium baixado pelo Playwright (~150 MB)
+browsers/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
