@@ -1,44 +1,34 @@
 # flight-watch
 
-Monitor de preço de passagens aéreas. Coleta o menor preço de uma rota de hora em
-hora, grava a série em CSV e notifica no Telegram quando o preço cruza uma faixa
-configurada.
+Airfare price monitor. It collects the lowest price on a route every hour, stores the series in CSV and sends a Telegram message when the price crosses into another configured band.
 
-## Uso
+## Usage
 
     pip install -r requirements.txt && playwright install chromium
     cp config.example.json config.json
-    python watch.py      # uma coleta
-    python analyze.py    # resumo e gráfico da série
+    python watch.py      # one collection
+    python analyze.py    # summary and chart of the series
 
-Cada execução é independente e o estado fica em `state.json`. Agende com cron,
-timer do systemd ou Agendador de Tarefas do Windows.
+Each run is independent and the state lives in `state.json`. Schedule it with cron, a systemd timer or the Windows Task Scheduler.
 
-## Funcionamento
+## How it works
 
-Playwright carrega a página de resultados e extrai `span.price-pointer`, o preço
-total com taxas. Valores abaixo de `noise_floor` são descartados.
+Playwright loads the results page and reads `span.price-pointer`, the total price with fees. Values below `noise_floor` are discarded.
 
-O menor preço é mapeado para uma faixa de `tiers`. A notificação dispara quando a
-faixa difere da registrada na execução anterior, nos dois sentidos: a faixa é
-rearmada na alta, então uma queda posterior volta a notificar.
+The lowest price is mapped to one of the `tiers`. A notification fires when the band differs from the one recorded on the previous run, in both directions: the band re-arms when the price goes up, so a later drop notifies again.
 
-## Resultados
+## Results
 
-636 execuções entre 24/06 e 06/08/2026. Na janela em que a busca ainda retornava
-resultado, 497 de 506 execuções coletaram preço. Cinco notificações enviadas.
+636 runs between 24 June and 6 August 2026. While the search still returned results, 497 of 506 runs collected a price. Five notifications sent.
 
-![Série de preços coletada](docs/price-history.png)
+![Collected price series](docs/price-history.png)
 
-## Notas
+## Notes
 
-- O seletor é `span.price-pointer` porque `span.value` expõe a tarifa-base sem
-  taxas e subestimaria o preço em centenas de reais.
-- Sem condição de parada: o monitor segue rodando depois da data da viagem, o que
-  gera as leituras vazias no fim da série.
-- Uma rota por instância; várias rotas são várias cópias com `config.json` próprios.
-- Para rodar como SYSTEM no Windows, `FLIGHT_WATCH_SITE_PACKAGES` aponta o
-  site-packages do usuário e o Chromium fica em `browsers/` dentro do projeto.
+- The selector is `span.price-pointer` because `span.value` holds the base fare without fees and would understate the price by hundreds of reais.
+- There's no stop condition: the monitor keeps running after the travel date, which produces the empty readings at the end of the series.
+- One route per instance; several routes mean several copies, each with its own `config.json`.
+- To run as SYSTEM on Windows, `FLIGHT_WATCH_SITE_PACKAGES` points to the user's site-packages and Chromium lives in `browsers/` inside the project.
 
 ## Stack
 
